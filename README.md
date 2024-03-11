@@ -9,6 +9,17 @@ Part of it may be used a starting point for beginners to build a template to re-
 Issues, contributions (and stars ;)) are welcome!
 
 
+# Disclaimer
+
+This is just a tiny dive into everything that is out there, including more advanced tools for packaging and configuration.
+
+Also I don't use python notebooks but some prefer these for data explorations and trial/error experimentation.
+
+So take this as a minimal start and develop it according to your liking and findings!
+
+Last but not least, this is a first time voluntary teaching so there may be some bugs, and for sure a lot room for improvements ...
+
+
 # Getting started
 
 This is one of the many ways to setup the project.
