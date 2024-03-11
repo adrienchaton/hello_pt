@@ -1,0 +1,25 @@
+name: hello_pt
+channels:
+  - conda-forge
+  - pytorch
+  - nvidia
+dependencies:
+  - pytorch>=2.1
+  - torchvision
+  - torchmetrics
+  - pytorch-cuda=12.1
+  - cudatoolkit
+  - lightning
+  - numpy
+  - scipy
+  - scikit-learn
+  - pandas
+  - joblib
+  - tensorboard
+  - yaml
+  - matplotlib
+  - seaborn
+  - tqdm
+  - pip
+  - pip:
+      - "-e ."
