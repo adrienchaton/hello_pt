@@ -36,7 +36,7 @@ class LinearModel(nn.Module):
         return {"y_hat": self.act(y_hat)}
 
 model1 = LinearModel(n_features, n_classes).to(device)
-optim1 = torch.optim.Adam(model1.parameters(), lr=1e-4, weight_decay=0.01)
+optim1 = torch.optim.AdamW(model1.parameters(), lr=1e-4, weight_decay=0.01)
 print(f"\nmodel1: with {sum(p.numel() for p in model1.parameters() if p.requires_grad)} trainable parameters and "
       f"{sum(p.numel() for p in model1.parameters() if not p.requires_grad)} fixed parameters")
 # model1: with 15 trainable parameters and 0 fixed parameters
@@ -99,7 +99,7 @@ class FrankensteinModel(LinearModel):
 #   and check their respective gradient magnitudes
 
 model2 = FrankensteinModel(n_features, n_classes).to(device)
-optim2 = torch.optim.Adam(model2.parameters(), lr=1e-4, weight_decay=0.)
+optim2 = torch.optim.Adam(model2.parameters(), lr=1e-4)
 print(f"\nmodel2: with {sum(p.numel() for p in model2.parameters() if p.requires_grad)} trainable parameters and "
       f"{sum(p.numel() for p in model2.parameters() if not p.requires_grad)} fixed parameters")
 # model2: with 19 trainable parameters and 4 fixed parameters
