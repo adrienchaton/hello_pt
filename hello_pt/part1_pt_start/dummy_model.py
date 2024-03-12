@@ -56,6 +56,7 @@ def print_trainable_parameters(model, verbose=False):
     print(f"trainable params: {trainable_params} || "
           f"all params: {all_param} || "
           f"trainable%: {100 * trainable_params / all_param:.2f}")
+# it can be a one-liner, e.g. sum(p.numel() for p in model.parameters() if p.requires_grad)
 
 print_trainable_parameters(model1, verbose=True)
 # trainable       linear.weight of size 64
