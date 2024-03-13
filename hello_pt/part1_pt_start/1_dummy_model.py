@@ -21,7 +21,7 @@ device = torch.device(f"cuda:{cuda_device}" if (torch.cuda.is_available() and cu
 class LinearBlock_A(nn.Module):
     def __init__(self, input_size, output_size):
         super(LinearBlock_A, self).__init__()
-        self.linear = nn.Linear(input_size, output_size)
+        self.linear = nn.Linear(input_size, output_size, bias=False)
         self.norm = nn.BatchNorm1d(output_size)
         self.act = nn.LeakyReLU()
         self.apply(self._init_p)  # TODO: customize init, or comment to use defaults
@@ -102,7 +102,7 @@ print_trainable_parameters(model2, verbose=False)  # unchanged, i.e. trainable p
 class LinearBlock_C(nn.Module):
     def __init__(self, input_size, output_size):
         super(LinearBlock_C, self).__init__()
-        self.block = nn.Sequential(nn.Linear(input_size, output_size), nn.BatchNorm1d(output_size), nn.LeakyReLU())
+        self.block = nn.Sequential(nn.Linear(input_size, output_size, bias=False), nn.BatchNorm1d(output_size), nn.LeakyReLU())
         # since we don't need to modify intermediate values, let's pack all layers into a sequential container
         self.learned_scaling = nn.Parameter(torch.ones(input_size, dtype=torch.float32), requires_grad=True)
         # the parameter is persistent and by default the gradients will be tracked for training
