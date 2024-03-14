@@ -21,7 +21,7 @@ device = torch.device(f"cuda:{cuda_device}" if (torch.cuda.is_available() and cu
 class LinearBlock_A(nn.Module):
     def __init__(self, input_size, output_size):
         super(LinearBlock_A, self).__init__()
-        self.linear = nn.Linear(input_size, output_size, bias=False)
+        self.linear = nn.Linear(input_size, output_size, bias=False)  # since it is followed with batch-norm
         self.norm = nn.BatchNorm1d(output_size)
         self.act = nn.LeakyReLU()
         self.apply(self._init_p)  # TODO: customize init, or comment to use defaults
@@ -60,14 +60,13 @@ def print_trainable_parameters(model, verbose=False):
 
 print_trainable_parameters(model1, verbose=True)
 # trainable       linear.weight of size 64
-# trainable       linear.bias of size 16
 # trainable       norm.weight of size 16
 # trainable       norm.bias of size 16
-# trainable params: 112 || all params: 112 || trainable%: 100.00
+# trainable params: 96 || all params: 96 || trainable%: 100.00
 # TODO: notice that all parameters are trainable and the activation doesn't have any learned parameters
 
 print(model1.state_dict().keys())  # TODO: notice the added "buffers" for tracking norm statistics
-# ['linear.weight', 'linear.bias', 'norm.weight', 'norm.bias', 'norm.running_mean', 'norm.running_var', 'norm.num_batches_tracked']
+# ['linear.weight', 'norm.weight', 'norm.bias', 'norm.running_mean', 'norm.running_var', 'norm.num_batches_tracked']
 torch.save(model1.state_dict(), os.path.join(Path(__file__).parent, "artefacts", "model1.pt"))
 model1.apply(model1._init_p)
 print(f"same output after random init., {torch.equal(output1, model1(input1))}")  # False
@@ -94,10 +93,10 @@ output2 = model2(input1)
 assert all(d1==d2 for d1, d2 in zip(output1.shape, output2.shape))
 print("\nmodel2: state dict after registering buffer for scale_value")
 print(model2.state_dict().keys())  # TODO: notice the added buffer for scale_value
-print_trainable_parameters(model2, verbose=False)  # unchanged, i.e. trainable params: 112 || all params: 112 || trainable%: 100.00
+print_trainable_parameters(model2, verbose=False)  # unchanged, i.e. trainable params: 96 || all params: 96 || trainable%: 100.00
 
 ########################################################################################################################
-## 0.C) sequential block with learned scaling factors for each input dimension (for the example ... "useless" in practice)
+## 0.C) sequential block with learned scaling factors for each input dimension (for the example ...)
 
 class LinearBlock_C(nn.Module):
     def __init__(self, input_size, output_size):
@@ -118,7 +117,7 @@ output3 = model3(input1)
 assert all(d1==d3 for d1, d3 in zip(output1.shape, output3.shape))
 print("\nmodel3: state dict after adding parameter for learned_scaling")
 print(model3.state_dict().keys())  # TODO: notice the added parameter for learned_scaling
-print_trainable_parameters(model3, verbose=False)  # trainable params: 116 || all params: 116 || trainable%: 100.00
+print_trainable_parameters(model3, verbose=False)  # trainable params: 100 || all params: 100 || trainable%: 100.00
 
 ########################################################################################################################
 ## 1) MLP classifier
@@ -142,7 +141,7 @@ print(f"\nmodel4: forwarded input1 of shape {input1.shape} to output4 of shape {
 # TODO: here the output is some "weights" for each of the n_classes
 #   you can convert logits to probas. with torch.softmax
 print_trainable_parameters(model4, verbose=False)
-# trainable params: 771 || all params: 771 || trainable%: 100.00
+# trainable params: 723 || all params: 723 || trainable%: 100.00
 
 ########################################################################################################################
 ## !!! Pitfalls !!!
@@ -170,5 +169,5 @@ print(f"\nmodel5: forwarded input1 of shape {input1.shape} to output5 of shape {
 # model5: forwarded input1 of shape torch.Size([8, 4]) to output5 of shape torch.Size([8, 3])
 print(model5.state_dict().keys())  # only params from layers1
 print_trainable_parameters(model5, verbose=False)
-# trainable params: 467 || all params: 467 || trainable%: 100.00 (all from layers1 and trainable)
+# trainable params: 435 || all params: 435 || trainable%: 100.00 (all from layers1 and trainable)
 
