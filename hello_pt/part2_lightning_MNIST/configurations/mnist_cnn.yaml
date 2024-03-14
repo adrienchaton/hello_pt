@@ -1,0 +1,11 @@
+# TODO: it is possible to nest parameters (as in "dependencies.yml") in the yaml
+#   so that they can be unpacked as e.g. **kwargs (https://book.pythontips.com/en/latest/args_and_kwargs.html)
+
+img_hw: 32
+n_layers: 4
+n_channels: 64
+lr: 1.0e-4  # beware, yaml wouldn't properly interpret 1e-4
+end_lr: 1.0e-7
+weight_decay: 1.0e-3
+n_iters: 5_000
+batch_size: 16
